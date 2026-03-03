@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Café Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom Cards | Cartões Personalizados */
+        .card-caixa {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+        /* Scrollers | Barras de Rolagem */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 p-6 md:p-12">
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+            <div>
+                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Gestão do Estabelecimento</h1>
+                <p class="text-slate-500 italic">Personnel and journey administration | Administração de pessoal</p>
+            </div>
+            
+            <button onclick="atualizarTudo()" class="group text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-lg transition-all border border-blue-100">
+                <i class="fa-solid fa-sync group-hover:animate-spin"></i>
+                <span>Sync Now | Sincronizar</span>
+            </button>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+            <div class="card-caixa p-8 rounded-3xl">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-blue-100 rounded-lg text-blue-600">
+                        <i class="fa-solid fa-user-plus text-xl"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-800">New Employee | Novo Funcionário</h2>
+                </div>
+                <div class="space-y-4">
+                    <input type="text" id="nome" placeholder="Full Name | Nome Completo" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <input type="email" id="email" placeholder="Email (required | obrigatório)" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <input type="text" id="cargo" placeholder="Role (e.g. Barista) | Cargo" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <button onclick="salvar()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-95">
+                        Save to System | Salvar no Sistema
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-caixa p-8 rounded-3xl">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-emerald-100 rounded-lg text-emerald-600">
+                        <i class="fa-solid fa-clock-rotate-left text-xl"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-800">Quick Query | Consulta Rápida</h2>
+                </div>
+                <div class="flex gap-3 mb-6">
+                    <input type="number" id="buscaId" placeholder="ID" class="w-24 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all">
+                    <button onclick="verRelatorio()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-200 transition-all">
+                        Generate Report | Gerar Relatório
+                    </button>
+                </div>
+                <div id="resultadoRelatorio" class="bg-slate-50 rounded-xl p-4 min-h-[100px] text-sm text-slate-600 italic flex flex-col justify-center items-center border border-dashed border-slate-300 text-center">
+                    Report results will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="card-caixa p-8 rounded-3xl mb-10">
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-slate-800 rounded-lg text-white">
+                        <i class="fa-solid fa-users text-lg"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-800">Real-Time Team | Equipe em Tempo Real</h2>
+                </div>
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-full animate-pulse">Live Monitoring</span>
+            </div>
+            <div id="listaEquipe" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+        <div class="mt-10 bg-slate-100/50 p-8 rounded-3xl border-2 border-dashed border-slate-200">
+            <h2 class="text-xl font-bold mb-6 text-slate-400 italic">Inactive Archive | Funcionários Inativos</h2>
+            <div id="listaInativos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 grayscale opacity-70"></div>
+        </div>
+    </div>
+
+    <div id="modalStats" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div>
+                    <h3 id="modalNomeFuncionario" class="text-xl font-bold text-slate-800">Stats</h3>
+                    <p id="modalSubtitulo" class="text-xs text-slate-500 uppercase font-semibold">Monthly Performance | Desempenho Mensal</p>
+                </div>
+                <button onclick="document.getElementById('modalStats').classList.add('hidden')" class="text-slate-400 hover:text-rose-500 transition-colors">
+                    <i class="fa-solid fa-circle-xmark text-2xl"></i>
+                </button>
+            </div>
+            <div id="statsConteudo" class="p-8"></div>
+        </div>
+    </div>
+
+    <script>
+        // API Endpoint / Configuração da API
+        const API_URL = "http://127.0.0.1:3001";
+
+        async function atualizarTudo() {
+            await carregarPainel();
+            await carregarInativos();
+        }
+
+        /**
+         * Loads all active employees and their current status (Working/Away)
+         * Carrega funcionários ativos e status atual (Trabalhando/Fora)
+         */
+        async function carregarPainel() {
+            try {
+                const res = await fetch(`${API_URL}/ponto/painel-geral`);
+                const data = await res.json();
+                const container = document.getElementById('listaEquipe');
+                
+                container.innerHTML = data.map(f => `
+                    <div onclick="abrirDetalhesFuncionario(${f.id}, '${f.nome}')" 
+                         class="group flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:border-blue-400 hover:shadow-md transition-all cursor-pointer">
+                        <div>
+                            <p class="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                                ${f.nome} <span class="text-[10px] text-slate-300 font-normal ml-1">#${f.id}</span>
+                            </p>
+                            <p class="text-[10px] text-slate-500 uppercase font-semibold">${f.cargo}</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="event.stopPropagation(); desligar(${f.id})" 
+                                    class="opacity-0 group-hover:opacity-100 text-rose-300 hover:text-rose-600 transition-all p-2" title="Desactivate">
+                               <i class="fa-solid fa-user-minus"></i>
+                            </button>
+                            <div class="flex flex-col items-end">
+                                <span class="h-2 w-2 rounded-full ${f.status === 'Trabalhando' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}"></span>
+                                <span class="text-[8px] font-black uppercase mt-1 ${f.status === 'Trabalhando' ? 'text-emerald-600' : 'text-slate-400'}">${f.status}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) { console.error("API Error:", err); }
+        }
+
+        // Logic for Reports and Modals remains similar but well structured for reading
+        // A lógica de relatórios e modais segue organizada para leitura...
+        
+        async function abrirDetalhesFuncionario(id, nome) {
+            document.getElementById('modalNomeFuncionario').innerText = nome;
+            const nomeMes = new Intl.DateTimeFormat('pt-BR', { month: 'long' }).format(new Date());
+            document.getElementById('modalSubtitulo').innerText = `Desempenho de ${nomeMes}`;
+            
+            document.getElementById('modalStats').classList.remove('hidden');
+            document.getElementById('statsConteudo').innerHTML = '<div class="flex justify-center py-10"><i class="fa-solid fa-spinner animate-spin text-3xl text-blue-500"></i></div>';
+            
+            try {
+                const res = await fetch(`${API_URL}/ponto/relatorio/${id}`);
+                const data = await res.json();
+                
+                document.getElementById('statsConteudo').innerHTML = `
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="bg-blue-50 border border-blue-100 p-5 rounded-2xl">
+                            <p class="text-blue-600 text-[10px] font-bold uppercase mb-1">Monthly Hours | Horas no Mês</p>
+                            <p class="text-3xl font-black text-blue-900">${data.total_mes || '00h 00m'}</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl">
+                            <p class="text-slate-500 text-[10px] font-bold uppercase mb-1">Active Days | Dias Ativos</p>
+                            <p class="text-3xl font-black text-slate-800">${data.historico ? data.historico.length : 0}</p>
+                        </div>
+                    </div>
+                    <h4 class="text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest">History | Histórico</h4>
+                    <div class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scroll">
+                        ${data.historico && data.historico.length > 0 ? data.historico.map(h => `
+                            <div class="flex justify-between items-center p-3 bg-white border border-slate-100 rounded-xl">
+                                <span class="text-sm text-slate-600 font-medium">${new Date(h.entrada).toLocaleDateString()}</span>
+                                <span class="bg-emerald-50 text-emerald-700 font-bold text-xs px-3 py-1 rounded-lg border border-emerald-100">${h.duracao_formatada}</span>
+                            </div>
+                        `).join('') : '<p class="text-center text-slate-400 text-sm italic">No records this month | Sem registros.</p>'}
+                    </div>
+                `;
+            } catch (err) {
+                document.getElementById('statsConteudo').innerHTML = '<p class="text-rose-500">Error loading data | Erro ao carregar.</p>';
+            }
+        }
+
+        // Rest of functions (verRelatorio, carregarInativos, desligar, salvar) 
+        // follow the same pattern...
+
+        async function verRelatorio() {
+            const id = document.getElementById('buscaId').value;
+            if(!id) return;
+            const div = document.getElementById('resultadoRelatorio');
+            div.innerHTML = '<i class="fa-solid fa-spinner animate-spin text-emerald-500"></i>';
+            try {
+                const res = await fetch(`${API_URL}/ponto/relatorio/${id}`);
+                const data = await res.json();
+                if (res.ok) {
+                    div.classList.remove('italic', 'items-center', 'justify-center');
+                    div.innerHTML = `
+                        <div class="w-full text-left animate-in fade-in duration-300">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <p class="font-bold text-slate-800 text-base leading-tight">${data.funcionario}</p>
+                                    <span class="text-[9px] font-bold uppercase ${data.esta_ativo ? 'text-emerald-500' : 'text-rose-500'}">${data.esta_ativo ? 'Active' : 'Inactive'}</span>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-blue-600 font-black text-lg leading-none">${data.total_mes || '00h 00m'}</p>
+                                    <p class="text-[9px] text-slate-400 font-bold uppercase mt-1 tracking-widest">Total</p>
+                                </div>
+                            </div>
+                        </div>`;
+                } else { div.innerHTML = `<p class="text-rose-500 font-bold text-xs">ID not found | Não encontrado.</p>`; }
+            } catch (err) { div.innerHTML = `<p class="text-rose-500 font-bold text-xs">Connection Error.</p>`; }
+        }
+
+        async function carregarInativos() {
+            try {
+                const res = await fetch(`${API_URL}/ponto/funcionarios/inativos`);
+                const data = await res.json();
+                const container = document.getElementById('listaInativos');
+                if(!data || data.length === 0) {
+                    container.innerHTML = '<p class="text-slate-400 text-xs italic col-span-full">Empty archive | Arquivo vazio.</p>';
+                    return;
+                }
+                container.innerHTML = data.map(f => `
+                    <div class="p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center opacity-80">
+                        <div>
+                            <p class="font-bold text-slate-500">${f.nome}</p>
+                            <p class="text-[9px] text-slate-400">${f.email || 'No email'}</p>
+                        </div>
+                        <span class="text-[8px] font-black text-slate-300 uppercase tracking-widest">Archived</span>
+                    </div>
+                `).join('');
+            } catch (err) { console.error(err); }
+        }
+
+        async function desligar(id) {
+            if(!confirm("Terminate this employee? | Deseja desligar este funcionário?")) return;
+            const res = await fetch(`${API_URL}/ponto/funcionarios/desligar/${id}`, { method: 'PATCH' });
+            if(res.ok) { atualizarTudo(); }
+        }
+
+        async function salvar() {
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const cargo = document.getElementById('cargo').value;
+            if(!nome || !cargo || !email) return alert("Fill all fields! | Preencha tudo!");
+            try {
+                const res = await fetch(`${API_URL}/ponto/funcionarios`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ nome, cargo, email })
+                });
+                if (res.ok) {
+                    alert("✅ Success | Sucesso!");
+                    document.getElementById('nome').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('cargo').value = '';
+                    atualizarTudo();
+                }
+            } catch (err) { alert("Connection error."); }
+        }
+
+        atualizarTudo();
+    </script>
+</body>
+</html>
