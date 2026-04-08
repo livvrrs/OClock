@@ -1,26 +1,23 @@
 # 🕒 O'Clock - Real-Time Personnel Monitoring
 
-O **O'Clock** é um dashboard administrativo para gestão de jornada e monitoramento de equipe em tempo real. Desenvolvido para facilitar o controle de ponto e a visualização imediata do status de cada colaborador.
+**O'Clock** is a specialized administrative dashboard designed for workforce journey management and real-time team monitoring. It was built to streamline time-tracking control and provide immediate visibility into every employee's current status.
 
-## 🚀 Funcionalidades
-- **Monitoramento Live:** Painel com indicadores pulsantes ("Live") para colaboradores em atividade.
-- **Priorização Inteligente:** Colaboradores trabalhando ou em intervalo aparecem automaticamente no topo da lista.
-- **Busca em Tempo Real:** Filtro por nome ou ID integrado ao dashboard.
-- **Gestão de Status:** Consulta rápida de horas mensais e status (Ativo/Arquivado).
-- **Arquivamento:** Sistema de desligamento que move registros para uma seção de histórico, mantendo a integridade dos dados.
+## 🚀 Key Features
+- **Live Monitoring:** Dashboard featuring pulsing "Live" indicators for active employees.
+- **Smart Prioritization:** Automatic sorting that brings employees who are "Working" or on "Lunch Break" to the top of the list.
+- **Real-Time Search:** Instant filtering by name or ID integrated directly into the dashboard.
+- **Status Management:** Quick-glance monthly hours and operational status (Active/Archived).
+- **Archiving System:** A termination workflow that moves records to a history section, ensuring data integrity while keeping the main view clean.
 
-## 🛠️ Tecnologias
-- **Frontend:** HTML5, Tailwind CSS (Design Responsivo), JavaScript (ES6+).
+## 🛠️ Tech Stack
+- **Frontend:** HTML5, Tailwind CSS (Responsive Design), JavaScript (ES6+).
 - **Backend:** Node.js, Express.
-- **Banco de Dados:** PostgreSQL.
-- **Integrações:** Font Awesome (Ícones), Google Fonts (Plus Jakarta Sans).
+- **Database:** PostgreSQL.
+- **Integrations:** Font Awesome (Icons), Google Fonts (Plus Jakarta Sans).
 
-## 📦 Como rodar o projeto
-1. Clone o repositório: `git clone https://github.com/livvrrs/OClock.git`
-2. Configure o banco de dados PostgreSQL usando o script SQL fornecido.
-3. No diretório `/backend`, instale as dependências: `npm install`
-4. Inicie o servidor: `npm start`
-5. Abra o `/frontend/index.html` no seu navegador.
+## 📦 Getting Started
+1. **Clone the repository:** ```bash
+   git clone [https://github.com/livvrrs/OClock.git](https://github.com/livvrrs/OClock.git)
 
 ---
 Desenvolvido por [Lívia Maria](https://github.com/livvrrs) 📍 João Pessoa, PB.
