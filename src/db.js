@@ -1,34 +1,27 @@
 /**
- * ARQUIVO: src/db.js
- * DESCRIÇÃO: Configuração da conexão com o banco de dados PostgreSQL.
- * DESCRIPTION: PostgreSQL database connection configuration.
+ * FILE: src/db.js
+ * DESCRIPTION: Database connection pooling using environment variables.
  */
 
-const { Pool } = require("pg");
-require("dotenv").config(); // Load environment variables | Carrega as variáveis de ambiente
+const { Pool } = require('pg');
+require('dotenv').config(); // This loads the variables from your .env file
 
-/**
- * DATABASE CONNECTION POOL
- * We use a "Pool" to manage multiple simultaneous connections efficiently.
- * Utilizamos um "Pool" para gerenciar múltiplas conexões simultâneas de forma eficiente.
- */
 const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 5432,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  // Security Note: Credentials are kept in a .env file (hidden from GitHub)
-  // Nota de Segurança: Credenciais são mantidas no arquivo .env (escondido do GitHub)
+  database: process.env.DB_DATABASE,
 });
 
-// INITIAL CONNECTION TEST | TESTE DE CONEXÃO INICIAL
+// INITIAL CONNECTION TEST
 pool.connect()
-  .then(() => {
-    console.log("Database connected successfully | Banco conectado com sucesso");
+  .then(client => {
+    console.log("✅ Database connected successfully");
+    client.release();
   })
   .catch(err => {
-    console.error("Connection error | Erro ao conectar no banco:", err.message);
+    console.error("❌ Connection error:", err.message);
   });
 
 module.exports = pool;
