@@ -2,6 +2,14 @@
 
 **O'Clock** is a specialized administrative dashboard designed for workforce journey management and real-time team monitoring. It was built to streamline time-tracking control and provide immediate visibility into every employee's current status.
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/99688100-1a23-432f-b669-91c9765f3d9a" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/78e2fd3a-3edc-4140-aa63-725de450863a" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f18a66bf-b0df-4648-9f11-51e69d54cbdf" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/fc4751ef-b1d7-4352-b098-1278c249f0d4" />
+
+
+
+
 ## 🚀 Key Features
 - **Live Monitoring:** Dashboard featuring pulsing "Live" indicators for active employees.
 - **Smart Prioritization:** Automatic sorting that brings employees who are "Working" or on "Lunch Break" to the top of the list.
