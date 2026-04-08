@@ -1,113 +1,212 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O'Clock</title>
+    <title>O'Clock - Smart Time Tracking</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        /* Glassmorphism effect | Efeito de Vidro */
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: radial-gradient(circle, #0a2d5e 0%, #011f4b 100%);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .clock-font { font-family: 'DM Serif Display', serif; }
+        .glass { 
+            background: #f1f8fe; 
+            border-radius: 4rem; 
+            box-shadow: 0 0 80px 10px rgba(0, 146, 241, 0.3);
+            position: relative;
+        }
+        .status-card { background-color: #b3cde0; border-radius: 2rem; }
+        .hidden { display: none; }
+        
+        .back-btn {
+            position: absolute;
+            left: -80px;
+            top: 20px;
+            background: #b3cde0;
+            padding: 15px;
+            border-radius: 50%;
+            color: #011f4b;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-50 to-blue-50 h-screen flex items-center justify-center p-4">
 
-    <div class="glass border border-white p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center">
-        <div class="mb-8">
-            <span class="bg-blue-100 text-blue-600 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-tighter">
-                O'Clock | Time Station
-            </span>
-            <div id="clock" class="text-5xl font-extrabold text-slate-800 mt-4 tracking-tighter">00:00:00</div>
-            <p id="dateText" class="text-slate-400 text-sm mt-1 uppercase font-semibold tracking-widest"></p>
-        </div>
-        
-        <div id="boasVindas" class="mb-8 h-16 flex items-center justify-center transition-all duration-300">
-            <p class="text-slate-500 font-medium italic">Waiting for ID... | Aguardando identificação...</p>
+<body class="p-4">
+
+    <div class="relative">
+        <button id="btnBack" onclick="resetUI()" class="back-btn hidden hover:scale-110 transition-transform">
+            <i data-lucide="undo-2"></i>
+        </button>
+
+        <div class="glass p-12 w-full max-w-md text-center">
+            
+            <div class="mb-6">
+                <span class="bg-[#7ba4c4] text-[#011f4b] text-[12px] font-bold px-4 py-1.5 rounded-full uppercase tracking-tight opacity-80">
+                    O'Clock: Time Station
+                </span>
+                <div id="clock" class="clock-font text-7xl text-[#1a1a1a] mt-4">00:00:00</div>
+                <p id="dateText" class="text-[#7ba4c4] text-xs mt-2 uppercase font-bold tracking-[0.2em]"></p>
+            </div>
+
+            <div id="screenLogin">
+                <h2 class="text-[#1e3a8a] font-extrabold text-lg mb-6">Enter your credentials:</h2>
+                
+                <div class="relative mb-3 flex items-center">
+                    <i data-lucide="user" class="absolute left-6 w-5 h-5 text-[#1e3a8a]"></i>
+                    <input type="number" id="funcId" placeholder="ID" style="background-color: #b3cde0;"
+                           class="w-full p-4 pl-14 rounded-full text-left text-lg font-bold text-slate-800 outline-none placeholder:text-[#5c7da0] placeholder:italic">
+                </div>
+
+                <div class="relative mb-8 flex items-center">
+                    <i data-lucide="lock" class="absolute left-6 w-5 h-5 text-[#1e3a8a]"></i>
+                    <input type="password" id="funcSenha" maxlength="6" placeholder="Password" style="background-color: #b3cde0;"
+                           class="w-full p-4 pl-14 pr-14 rounded-full text-left text-lg font-bold text-slate-800 outline-none placeholder:text-[#5c7da0] placeholder:italic">
+                    
+                    <button type="button" onclick="togglePassword()" class="absolute right-6 focus:outline-none text-[#1e3a8a] hover:text-blue-900">
+                        <i id="eyeIcon" data-lucide="eye"></i>
+                    </button>
+                </div>
+
+                <button onclick="registrar('entrada')" class="bg-[#013a63] hover:bg-[#01497c] text-white font-bold py-3 px-10 rounded-xl shadow-lg active:scale-95 transition-all">
+                    Submit
+                </button>
+            </div>
+
+            <div id="screenStatus" class="hidden">
+                <h2 id="userNameDisplay" class="text-[#1e3a8a] font-extrabold text-lg mb-6">Hello! You're clocked in.</h2>
+                
+                <div class="status-card p-6 mb-8 grid grid-cols-2 gap-y-2 text-left shadow-inner">
+                    <div>
+                        <p id="userIdent" class="text-[#5c7da0] text-[10px] font-bold uppercase tracking-wider">ID #--</p>
+                        <p class="text-[#1e3a8a] font-extrabold">Status: <span class="text-emerald-600">Working</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p id="userCargo" class="text-[#5c7da0] text-[10px] font-bold uppercase tracking-wider">Position</p>
+                        <p id="userHours" class="text-[#1e3a8a] font-extrabold">00 hours</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-4">
+                    <button onclick="registrar('intervalo')" class="bg-[#e9d502] hover:bg-yellow-500 text-[#011f4b] font-bold py-3 px-8 rounded-2xl shadow-md transition-all active:scale-95">
+                        Break
+                    </button>
+                    <button onclick="registrar('saida')" class="bg-[#e57373] hover:bg-rose-500 text-white font-bold py-3 px-8 rounded-2xl shadow-md transition-all active:scale-95">
+                        Clock Out
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div class="relative group mb-8">
-            <input type="number" id="funcId" oninput="buscarFuncionario()" placeholder="Enter your ID | Seu ID" 
-                   class="w-full p-6 bg-slate-100/50 border-2 border-transparent rounded-2xl text-center text-3xl font-bold text-slate-800 focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all placeholder:text-slate-300">
+        <div id="toast" class="hidden fixed bottom-10 right-10 bg-white p-5 rounded-3xl shadow-2xl border-l-8 border-blue-500 animate-bounce transition-all">
+            <p id="toastMsg" class="text-[#011f4b] font-bold text-sm"></p>
         </div>
-
-        <div id="botoesAcao" class="grid grid-cols-2 gap-4 opacity-10 pointer-events-none transition-all duration-500 scale-95">
-            <button onclick="registrar('entrada')" class="group relative overflow-hidden bg-emerald-500 p-5 rounded-2xl shadow-lg shadow-emerald-200 active:scale-95 transition-all">
-                <span class="relative z-10 text-white font-extrabold tracking-tight uppercase">Clock In | Entrada</span>
-                <div class="absolute inset-0 bg-gradient-to-tr from-emerald-600 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </button>
-            <button onclick="registrar('saida')" class="group relative overflow-hidden bg-rose-500 p-5 rounded-2xl shadow-lg shadow-rose-200 active:scale-95 transition-all">
-                <span class="relative z-10 text-white font-extrabold tracking-tight uppercase">Clock Out | Saída</span>
-                <div class="absolute inset-0 bg-gradient-to-tr from-rose-600 to-rose-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </button>
-        </div>
-
-        <div id="mensagem" class="mt-8 p-4 rounded-2xl hidden text-sm font-bold animate-in fade-in zoom-in duration-300"></div>
     </div>
 
     <script>
-        const API_URL = "http://127.0.0.1:3001";
+        const API_URL = "http://localhost:3001";
 
-        /** * Clock and Date Update | Atualização de Relógio e Data
-         */
+        // Clock & Date Logic
         setInterval(() => {
             const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('pt-BR');
-            document.getElementById('dateText').innerText = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+            document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('dateText').innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
         }, 1000);
 
-        /**
-         * Live search for employee ID | Busca dinâmica do ID do funcionário
-         */
-        async function buscarFuncionario() {
-            const id = document.getElementById('funcId').value;
-            const welcome = document.getElementById('boasVindas');
-            const botoes = document.getElementById('botoesAcao');
-
-            if (id.length > 0) {
-                try {
-                    const res = await fetch(`${API_URL}/ponto/relatorio/${id}`);
-                    const data = await res.json();
-                    if (res.ok) {
-                        welcome.innerHTML = `<div class="animate-bounce"><h2 class="text-2xl font-extrabold text-blue-600">Hello, ${data.funcionario.split(' ')[0]}!</h2><p class="text-slate-400 text-xs">Ready to record? | Pronto para registrar?</p></div>`;
-                        botoes.classList.remove('opacity-10', 'pointer-events-none', 'scale-95');
-                    } else {
-                        welcome.innerHTML = `<p class="text-rose-400 font-medium">Unknown ID | ID inexistente</p>`;
-                        botoes.classList.add('opacity-10', 'pointer-events-none', 'scale-95');
-                    }
-                } catch (e) { console.error("Search Error:", e); }
+        // Toggle Password Visibility
+        function togglePassword() {
+            const passInput = document.getElementById('funcSenha');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.setAttribute('data-lucide', 'eye-off');
             } else {
-                welcome.innerHTML = `<p class="text-slate-500 font-medium italic">Waiting... | Aguardando...</p>`;
-                botoes.classList.add('opacity-10', 'pointer-events-none', 'scale-95');
+                passInput.type = 'password';
+                eyeIcon.setAttribute('data-lucide', 'eye');
             }
+            lucide.createIcons();
         }
 
-        /**
-         * Records Clock-in or Clock-out | Registra Entrada ou Saída
-         * @param {string} tipo - 'entrada' or 'saida'
-         */
         async function registrar(tipo) {
             const id = document.getElementById('funcId').value;
-            const msgDiv = document.getElementById('mensagem');
+            const senha = document.getElementById('funcSenha').value;
+
+            if(!id || !senha) return showToast("Enter ID and Password!");
+
             try {
                 const res = await fetch(`${API_URL}/ponto/${tipo}`, {
                     method: tipo === 'entrada' ? 'POST' : 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ funcionario_id: id })
+                    body: JSON.stringify({ funcionario_id: id, senha: senha })
                 });
+                
                 const data = await res.json();
                 
-                // Styling feedback based on success or error | Estilizando feedback
-                msgDiv.className = `mt-8 p-4 rounded-2xl font-bold ${res.ok ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'}`;
-                msgDiv.innerText = res.ok ? `Success! ${tipo} recorded. | Sucesso!` : data.erro;
-                msgDiv.classList.remove('hidden');
+                if(res.ok || (res.status === 200 && data.erro)) {
+                    if (data.nome) {
+                        document.getElementById('userNameDisplay').innerText = `Hello, ${data.nome.split(' ')[0]}! You're clocked in.`;
+                        document.getElementById('userCargo').innerText = data.cargo || "Employee";
+                        document.getElementById('userIdent').innerText = `ID #${id}`;
+                        document.getElementById('userHours').innerText = data.total_horas || "00 hours";
+                    }
 
-                // Auto-reload to clear data after 3 seconds | Recarrega após 3 segundos
-                setTimeout(() => location.reload(), 3000);
-            } catch (e) { alert("Connection error | Erro de conexão"); }
+                    showToast(res.ok ? "Action registered!" : "Welcome back!");
+                    
+                    if(tipo === 'entrada' || (data.erro && data.erro.includes("active shift"))) {
+                        toggleScreens(true);
+                    }
+                    
+                    if(tipo === 'saida' && res.ok) resetUI();
+
+                } else {
+                    showToast(data.erro || "Error!");
+                }
+            } catch (e) { 
+                showToast("Server Offline");
+            }
         }
+
+        function toggleScreens(isLoggedIn) {
+            document.getElementById('screenLogin').classList.toggle('hidden', isLoggedIn);
+            document.getElementById('screenStatus').classList.toggle('hidden', !isLoggedIn);
+            document.getElementById('btnBack').classList.toggle('hidden', !isLoggedIn);
+        }
+
+        function resetUI() {
+            toggleScreens(false);
+            document.getElementById('funcId').value = '';
+            document.getElementById('funcSenha').value = '';
+            document.getElementById('funcSenha').type = 'password';
+            lucide.createIcons();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 4000);
+        }
+
+        lucide.createIcons();
     </script>
 </body>
-
 </html>
