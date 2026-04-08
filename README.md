@@ -24,4 +24,4 @@
 5. **Launch the UI:** Open /frontend/index.html in your preferred web browser.
 
 ---
-Developed with ☕ and code by [Lívia Maria](https://github.com/livvrrs) 📍 João Pessoa, Brazil.
+Developed by [Lívia Oliveira](https://github.com/livvrrs) 📍 João Pessoa, Brazil.
