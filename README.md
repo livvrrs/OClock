@@ -20,4 +20,4 @@
    git clone [https://github.com/livvrrs/OClock.git](https://github.com/livvrrs/OClock.git)
 
 ---
-Desenvolvido por [Lívia Maria](https://github.com/livvrrs) 📍 João Pessoa, PB.
+Developed by [Lívia Oliveira](https://github.com/livvrrs) 📍 João Pessoa, PB.
