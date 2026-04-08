@@ -1,73 +1,26 @@
-# ☕ OClock - Management System
+# 🕒 O'Clock - Real-Time Personnel Monitoring
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D%2014.0.0-brightgreen)](https://nodejs.org/)
+O **O'Clock** é um dashboard administrativo para gestão de jornada e monitoramento de equipe em tempo real. Desenvolvido para facilitar o controle de ponto e a visualização imediata do status de cada colaborador.
 
-A professional full-stack solution for time-tracking and staff management, specifically tailored for cafes and restaurants. Featuring a sleek glassmorphism design and a robust PostgreSQL backend.
+## 🚀 Funcionalidades
+- **Monitoramento Live:** Painel com indicadores pulsantes ("Live") para colaboradores em atividade.
+- **Priorização Inteligente:** Colaboradores trabalhando ou em intervalo aparecem automaticamente no topo da lista.
+- **Busca em Tempo Real:** Filtro por nome ou ID integrado ao dashboard.
+- **Gestão de Status:** Consulta rápida de horas mensais e status (Ativo/Arquivado).
+- **Arquivamento:** Sistema de desligamento que move registros para uma seção de histórico, mantendo a integridade dos dados.
 
-*Uma solução full-stack profissional para controle de ponto e gestão de pessoal, desenhada para cafés e restaurantes. Apresenta design glassmorphism moderno e um backend robusto em PostgreSQL.*
+## 🛠️ Tecnologias
+- **Frontend:** HTML5, Tailwind CSS (Design Responsivo), JavaScript (ES6+).
+- **Backend:** Node.js, Express.
+- **Banco de Dados:** PostgreSQL.
+- **Integrações:** Font Awesome (Ícones), Google Fonts (Plus Jakarta Sans).
 
----
-
-## 🛠️ Tech Stack | Tecnologias
-* **Backend:** Node.js & Express.js
-* **Database:** PostgreSQL (with `pg` pool connection)
-* **Frontend:** HTML5, Tailwind CSS, FontAwesome
-* **Environment:** Dotenv for secure credentials
-
----
-
-## ✨ Key Features | Funcionalidades
-- 🕒 **Real-time Clock-in/out:** Smart validation system that prevents unauthorized entries.
-- 📊 **Admin Dashboard:** Full control over staff registration, performance metrics, and reporting.
-- ⏳ **Automated Calculations:** Precise work duration tracking with PostgreSQL intervals.
-- 🗄️ **Soft Delete System:** Inactive employees are archived to preserve historical data integrity.
-- 🎨 **Modern UI:** Responsive interface with glassmorphism effects and intuitive feedback.
+## 📦 Como rodar o projeto
+1. Clone o repositório: `git clone https://github.com/livvrrs/OClock.git`
+2. Configure o banco de dados PostgreSQL usando o script SQL fornecido.
+3. No diretório `/backend`, instale as dependências: `npm install`
+4. Inicie o servidor: `npm start`
+5. Abra o `/frontend/index.html` no seu navegador.
 
 ---
-
-## 🚀 Getting Started | Como Começar
-
-### 1. Database Setup | Configuração do Banco
-Execute the SQL scripts located in the `/database` folder in your PostgreSQL instance:
-1. `schema.sql` - To create the tables.
-2. `seeds.sql` - To populate with test data.
-
-### 2. Environment Variables | Variáveis de Ambiente
-Rename `.env.example` to `.env` and fill in your local database credentials:
-`
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=your_user
-DB_PASSWORD=your_password
-DB_NAME=cafe_ponto
-PORT=3001`
-
-
-### 3. Installation | Instalação
-`npm install`
-
-### 4. Start the server | Inicie o servidor
-`npm start`
-
----
-
-# 📂 Project Structure | Estrutura
-```text
-├── database/         # SQL Scripts (Schema & Seeds)
-├── routes/           # Express API Routes
-├── .env.example      # Template for environment variables
-├── admin.html        # Management Dashboard
-├── index.html        # Employee Clock-in Station
-└── server.js         # Entry point
-```
-
-# 👨‍🍳 Test Employees | Equipe de Teste
-The project includes iconic staff members for testing:
-
-- Remy (Chef de Cuisine)
-
-# 📝 License | Licença
-This project is MIT licensed.
-
-Developed with ☕ by Lívia Oliveira
+Desenvolvido por [Lívia Maria](https://github.com/livvrrs) 📍 João Pessoa, PB.
