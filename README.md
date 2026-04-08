@@ -16,8 +16,12 @@
 - **Integrations:** Font Awesome (Icons), Google Fonts (Plus Jakarta Sans).
 
 ## 📦 Getting Started
-1. **Clone the repository:** ```bash
-   git clone [https://github.com/livvrrs/OClock.git](https://github.com/livvrrs/OClock.git)
+1. **Clone the repository:**
+   git clone https://github.com/livvrrs/OClock.git
+2. **Database Setup:** Configure your PostgreSQL database using the provided SQL script.
+3. **Install Backend Dependencies:** Navigate to the /backend directory and run: npm install
+4. **Start the Server:** npm start
+5. **Launch the UI:** Open /frontend/index.html in your preferred web browser.
 
 ---
-Developed by [Lívia Oliveira](https://github.com/livvrrs) 📍 João Pessoa, PB.
+Developed with ☕ and code by [Lívia Maria](https://github.com/livvrrs) 📍 João Pessoa, Brazil.
